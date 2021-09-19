@@ -25,7 +25,7 @@ var formSubmitHandler = function(event) {
 var getWeather = function(cityname) {
 
 
-  var apiUrl =  "https://api.openweathermap.org/data/2.5/forecast?q="+ cityname+"&units=imperial&appid=2176a5b44b8cc86cad4460be2565011f"
+  var apiUrl =  "https://api.openweathermap.org/data/2.5/forecast?q="+ cityname+ "&units=imperial&appid=2176a5b44b8cc86cad4460be2565011f"
 
   // make a get request to url
   fetch(apiUrl)
@@ -53,11 +53,13 @@ var displayRepos = function(repos, searchTerm) {
     
   //  return;
  // }
-
-  //repoSearchTerm.textContent = searchTerm;
-  repoSearchTerm.textContent = repos.city.name;
+var getDate = repos.list[0].dt_txt; 
+var displayDate= moment(getDate).format('MM/DD/YYYY');
+//getDate = new Date("MM-dd-YYYY"); // MM-dd-YYYY
+  repoSearchTerm.innerHTML = "<br>" + searchTerm + " ("+ displayDate  +") <img src='http://openweathermap.org/img/w/" + repos.list[0].weather[0].icon + ".png'>";
+  //repoSearchTerm.textContent = repos.city.name;
   //repoContainerEl.innerHTML = repos.city.id;
-  repoContainerEl.innerHTML = repos.list[0].main.temp;
+  repoContainerEl.innerHTML = "Temp: "+repos.list[0].main.temp + " &deg;F<br> Wind: "+repos.list[0].wind.speed + " MPH <br> Humidity: "+repos.list[0].main.humidity + "%";
   
  // console.log(repos);
   // loop over repos
