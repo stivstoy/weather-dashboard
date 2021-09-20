@@ -11,6 +11,17 @@ var cityRow = document.getElementById("save-city");
 var cities = [];
 var savedCity;
 var btn = document.getElementById("btn");
+
+//checking for local storage
+if (JSON.parse(window.localStorage.getItem('cityList'))) {
+    cities = JSON.parse(window.localStorage.getItem('cityList'));    
+}
+else {
+   cities = [];
+}
+
+displayCities();
+
 var formSubmitHandler = function(event) {
   // prevent page from refreshing
   event.preventDefault();
@@ -32,7 +43,7 @@ var formSubmitHandler = function(event) {
   }
 };
 
-// get weather for the current date
+// Get weather for the current date
 var getCurrentWeather = function(cityname) {
 
 
@@ -57,7 +68,8 @@ var getCurrentWeather = function(cityname) {
       });
   };
 
-  var displayCurrentWeather = function(currentWeather, searchTerm) {
+// Display current day weather
+  var displayCurrentWeather = function(currentWeather) {
     
  
     let unix_timestamp = currentWeather.dt;
@@ -68,7 +80,7 @@ var getCurrentWeather = function(cityname) {
     var currentDate = month+'/'+day+'/'+year;
  
 
-   repoSearchTerm.innerHTML = "<br>" + searchTerm + " ("+ currentDate  +") <img src='http://openweathermap.org/img/w/" + currentWeather.weather[0].icon + ".png'>";
+   repoSearchTerm.innerHTML = "<br>" + currentWeather.name + " ("+ currentDate  +") <img src='http://openweathermap.org/img/w/" + currentWeather.weather[0].icon + ".png'>";
    repoContainerEl.innerHTML = "Temp: "+currentWeather.main.temp + " &deg;F<br> Wind: "+currentWeather.wind.speed + " MPH <br> Humidity: "+currentWeather.main.humidity + "%";
  
   
@@ -101,6 +113,7 @@ var getForecastWeather = function(cityname) {
     });
 };
 
+// Display 5-day forecast
 var displayForecast = function(forecast) {
     // Day one
     var getDate1 = forecast.list[0].dt_txt; 
@@ -129,7 +142,7 @@ var displayForecast = function(forecast) {
 
   }
  
-// function to store textarea scheduled items
+// function to store city searches
 function storeCity(citySearch) {
     const cityDataObj = {
         city: citySearch
@@ -145,31 +158,25 @@ function storeCity(citySearch) {
    
 }
 
-// function to display stored scheduled items
+// function to display stored city searches
 function displayCities() {
     var text = '';
     for (var i = 0; i < cities.length; i++) {
        
-       var options = text +=  "<button type='submit' id='btn'>" +cities[i].city+"</button> <br>";
-        cityRow.innerHTML = options;
-        //document.getElementById("save-city").innerHTML = "test";
-        savedCity = cities[i].city;
+       var options = text +=  "<button  id=" +cities[i].city+  " onclick='searchCity("+JSON.stringify(cities[i].city)+")'>" +cities[i].city+"</button> <br>";
+        cityRow.innerHTML = options;     
+       
         
         }
-        // Defining custom functions
- function current(){
-    getCurrentWeather(savedCity);
+        
+    }
+// retrieve stored city searches
+function searchCity(savedCity){
+    
+    getCurrentWeather( savedCity);
+    getForecastWeather( savedCity);
     
 }
- 
-function forecast(){
-   
-    getForecastWeather(savedCity);
-}
-btn.addEventListener("click", current);
-btn.addEventListener("click", forecast);
-}
-
  
 // add event listeners to forms
 userFormEl.addEventListener("submit", formSubmitHandler);
