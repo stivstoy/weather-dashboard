@@ -22,25 +22,10 @@ Create a daily planner that displays the current day and time that you can enter
 * 3rd Party API (Moment.js)
 
 ## Website
-https://stivstoy.github.io/daily-planner/
+https://stivstoy.github.io/weather-dashboard/
 
-![scheduler](https://user-images.githubusercontent.com/87504797/133002372-6e93c27c-cbe6-4c3b-af5a-0aa2d1b3a4c2.jpg)
+![weather](https://user-images.githubusercontent.com/87504797/133957773-a84028c4-bfc3-4915-b5bb-a6da07757371.jpg)
 
 
 ## Contribution
 Made with ❤️ by Steve Hutson
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-![weather](https://user-images.githubusercontent.com/87504797/133957773-a84028c4-bfc3-4915-b5bb-a6da07757371.jpg)
