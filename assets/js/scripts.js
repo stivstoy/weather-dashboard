@@ -2,8 +2,15 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#city-search");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
-var forecastDisplay = document.querySelector("#forecast");
-
+var forecastDisplay1 = document.querySelector("#forecast1");
+var forecastDisplay2 = document.querySelector("#forecast2");
+var forecastDisplay3 = document.querySelector("#forecast3");
+var forecastDisplay4 = document.querySelector("#forecast4");
+var forecastDisplay5 = document.querySelector("#forecast5");
+var cityRow = document.getElementById("save-city");
+var cities = [];
+var savedCity;
+var btn = document.getElementById("btn");
 var formSubmitHandler = function(event) {
   // prevent page from refreshing
   event.preventDefault();
@@ -15,6 +22,7 @@ var formSubmitHandler = function(event) {
    
     getCurrentWeather(citySearch);
     getForecastWeather(citySearch);
+    storeCity(citySearch);
 
     // clear old content
     repoContainerEl.textContent = "";
@@ -24,6 +32,7 @@ var formSubmitHandler = function(event) {
   }
 };
 
+// get weather for the current date
 var getCurrentWeather = function(cityname) {
 
 
@@ -81,7 +90,7 @@ var getForecastWeather = function(cityname) {
         console.log(response);
         response.json().then(function(data) {
           console.log(data);
-          displayForecast(data, cityname);
+          displayForecast(data);
         });
       } else {
         alert("Error: " + response.statusText);
@@ -92,14 +101,75 @@ var getForecastWeather = function(cityname) {
     });
 };
 
-var displayForecast = function(forecast, searchTerm) {
-    var getDate = forecast.list[0].dt_txt; 
-    var displayDate1= moment(getDate).format('MM/DD/YYYY');
-    forecastDisplay.innerHTML = "<B>" +displayDate1+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[0].weather[0].icon + ".png'> <br> Temp: "+forecast.list[0].main.temp + " &deg;F<br> Wind: "+forecast.list[0].wind.speed + " MPH <br> Humidity: "+forecast.list[0].main.humidity + "%";
+var displayForecast = function(forecast) {
+    // Day one
+    var getDate1 = forecast.list[0].dt_txt; 
+    var displayDate1= moment(getDate1).format('MM/DD/YYYY');
+    forecastDisplay1.innerHTML = "<B>" +displayDate1+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[0].weather[0].icon + ".png'> <br> Temp: "+forecast.list[0].main.temp + " &deg;F<br> Wind: "+forecast.list[0].wind.speed + " MPH <br> Humidity: "+forecast.list[0].main.humidity + "%";
 
+ // Day two
+ var getDate2 = forecast.list[8].dt_txt; 
+ var displayDate2= moment(getDate2).format('MM/DD/YYYY');
+ forecastDisplay2.innerHTML = "<B>" +displayDate2+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[8].weather[0].icon + ".png'> <br> Temp: "+forecast.list[8].main.temp + " &deg;F<br> Wind: "+forecast.list[8].wind.speed + " MPH <br> Humidity: "+forecast.list[8].main.humidity + "%";
+
+  // Day three
+  var getDate3 = forecast.list[16].dt_txt; 
+  var displayDate3= moment(getDate3).format('MM/DD/YYYY');
+  forecastDisplay3.innerHTML = "<B>" +displayDate3+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[16].weather[0].icon + ".png'> <br> Temp: "+forecast.list[16].main.temp + " &deg;F<br> Wind: "+forecast.list[16].wind.speed + " MPH <br> Humidity: "+forecast.list[16].main.humidity + "%";
+
+   // Day four
+   var getDate4 = forecast.list[24].dt_txt; 
+   var displayDate4= moment(getDate4).format('MM/DD/YYYY');
+   forecastDisplay4.innerHTML = "<B>" +displayDate4+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[24].weather[0].icon + ".png'> <br> Temp: "+forecast.list[24].main.temp + " &deg;F<br> Wind: "+forecast.list[24].wind.speed + " MPH <br> Humidity: "+forecast.list[24].main.humidity + "%";
+
+    // Day five
+    var getDate5 = forecast.list[32].dt_txt; 
+    var displayDate5= moment(getDate5).format('MM/DD/YYYY');
+    forecastDisplay5.innerHTML = "<B>" +displayDate5+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[32].weather[0].icon + ".png'> <br> Temp: "+forecast.list[32].main.temp + " &deg;F<br> Wind: "+forecast.list[32].wind.speed + " MPH <br> Humidity: "+forecast.list[32].main.humidity + "%";
 
   }
  
+// function to store textarea scheduled items
+function storeCity(citySearch) {
+    const cityDataObj = {
+        city: citySearch
+        
+    }
+ 
+     cities.push(cityDataObj);
+     console.log(cities);
+     window.localStorage.setItem('cityList', JSON.stringify(cities));
+     window.localStorage.getItem('cityList');
+      JSON.parse(window.localStorage.getItem('cityList'));
+     displayCities();
+   
+}
 
+// function to display stored scheduled items
+function displayCities() {
+    var text = '';
+    for (var i = 0; i < cities.length; i++) {
+       
+       var options = text +=  "<button type='submit' id='btn'>" +cities[i].city+"</button> <br>";
+        cityRow.innerHTML = options;
+        //document.getElementById("save-city").innerHTML = "test";
+        savedCity = cities[i].city;
+        
+        }
+        // Defining custom functions
+ function current(){
+    getCurrentWeather(savedCity);
+    
+}
+ 
+function forecast(){
+   
+    getForecastWeather(savedCity);
+}
+btn.addEventListener("click", current);
+btn.addEventListener("click", forecast);
+}
+
+ 
 // add event listeners to forms
 userFormEl.addEventListener("submit", formSubmitHandler);

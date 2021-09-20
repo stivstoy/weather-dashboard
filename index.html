@@ -14,28 +14,36 @@
         <h1>Weather Planner</h1>
     </header>
 
-    <main style="display:flex;">
-        <div>
+   <div class="container">
+        <div style="float:left;">
             <h3>Search By City</h3>
             <form id="user-form">
                 <label class="form-label" for="city-search"></label>
                 <input name="city-search" id="city-search" type="text" autofocus="true" class="form-input" />
                 <button type="submit" class="btn">Search</button>
             </form>
+            <div id="save-city">
+                
+            </div>
         </div>
 
-        <div style ="width: 70%; text-align: center;">
-           <div> <h2 style="margin-top: 0px;"><span id="repo-search-term"></span></h2></div>
-            <div id="repos-container" style="clear:both;"></div>
+        <div style="text-align: center;">
+           <div > <h2 style="margin-top: 0px;"><span id="repo-search-term"></span></h2></div>
+            <div id="repos-container"></div>
         </div>
     
     
-    </main>
+   
 
-    <div style="margin-top: 30px;">
-        <div id="forecast"></div>
+    <div style="margin-top: 40px; display: flex; justify-content: center; flex-wrap: wrap;">
+        <div id="forecast1" class="weather-forcast"></div>
+        <div id="forecast2" class="weather-forcast"></div>
+        <div id="forecast3" class="weather-forcast"></div>
+        <div id="forecast4" class="weather-forcast"></div>
+        <div id="forecast5" class="weather-forcast"></div>
+
     </div>
-
+</div>
     <script src="./assets/js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </body>
