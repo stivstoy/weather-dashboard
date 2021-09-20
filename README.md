@@ -6,20 +6,8 @@ Create a weather application that shows current weather annd five day forecast b
 * HTML
 * CSS
 * JavaScript
-* 3rd Party Open Weather API
+* Server Side Open Weather API
 
-## Website
-https://stivstoy.github.io/daily-planner/
-
-# Challenge 5 UT Coding Bootcamp
-
-## Purpose
-Create a daily planner that displays the current day and time that you can enter tasks and save.
-## Built With
-* HTML
-* CSS
-* JavaScript
-* 3rd Party API (Moment.js)
 
 ## Website
 https://stivstoy.github.io/weather-dashboard/
