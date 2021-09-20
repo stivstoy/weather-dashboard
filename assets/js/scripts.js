@@ -2,7 +2,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#city-search");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
-var repoName;
+var forecastDisplay = document.querySelector("#forecast");
 
 var formSubmitHandler = function(event) {
   // prevent page from refreshing
@@ -12,7 +12,9 @@ var formSubmitHandler = function(event) {
   var citySearch = nameInputEl.value.trim();
 
   if (citySearch) {
-    getWeather(citySearch);
+   
+    getCurrentWeather(citySearch);
+    getForecastWeather(citySearch);
 
     // clear old content
     repoContainerEl.textContent = "";
@@ -22,7 +24,51 @@ var formSubmitHandler = function(event) {
   }
 };
 
-var getWeather = function(cityname) {
+var getCurrentWeather = function(cityname) {
+
+
+    var apiCurrentUrl =  "https://api.openweathermap.org/data/2.5/weather?q="+ cityname+ "&units=imperial&appid=2176a5b44b8cc86cad4460be2565011f"
+  
+    // make a get request to url
+    fetch(apiCurrentUrl)
+      .then(function(response) {
+        // request was successful
+        if (response.ok) {
+          console.log(response);
+          response.json().then(function(currentWeather) {
+            console.log(currentWeather);
+            displayCurrentWeather(currentWeather, cityname);
+          });
+        } else {
+          alert("Error: " + response.statusText);
+        }
+      })
+      .catch(function(error) {
+        alert("Unable to connect");
+      });
+  };
+
+  var displayCurrentWeather = function(currentWeather, searchTerm) {
+    
+ 
+    let unix_timestamp = currentWeather.dt;
+    var cDate = new Date(unix_timestamp * 1000);
+    var month = cDate.getMonth() + 1;
+    var day = cDate.getDate();
+    var year = cDate.getFullYear();
+    var currentDate = month+'/'+day+'/'+year;
+ 
+
+   repoSearchTerm.innerHTML = "<br>" + searchTerm + " ("+ currentDate  +") <img src='http://openweathermap.org/img/w/" + currentWeather.weather[0].icon + ".png'>";
+   repoContainerEl.innerHTML = "Temp: "+currentWeather.main.temp + " &deg;F<br> Wind: "+currentWeather.wind.speed + " MPH <br> Humidity: "+currentWeather.main.humidity + "%";
+ 
+  
+  
+  }  
+
+// 5-day Forecast
+
+var getForecastWeather = function(cityname) {
 
 
   var apiUrl =  "https://api.openweathermap.org/data/2.5/forecast?q="+ cityname+ "&units=imperial&appid=2176a5b44b8cc86cad4460be2565011f"
@@ -35,7 +81,7 @@ var getWeather = function(cityname) {
         console.log(response);
         response.json().then(function(data) {
           console.log(data);
-          displayRepos(data, cityname);
+          displayForecast(data, cityname);
         });
       } else {
         alert("Error: " + response.statusText);
@@ -46,63 +92,14 @@ var getWeather = function(cityname) {
     });
 };
 
-var displayRepos = function(repos, searchTerm) {
-  // check if api returned any repos
-  //if (repos.length === 0) {
-  //  repoContainerEl.textContent = "No repositories found.";
-    
-  //  return;
- // }
-var getDate = repos.list[0].dt_txt; 
-var displayDate= moment(getDate).format('MM/DD/YYYY');
-//getDate = new Date("MM-dd-YYYY"); // MM-dd-YYYY
-  repoSearchTerm.innerHTML = "<br>" + searchTerm + " ("+ displayDate  +") <img src='http://openweathermap.org/img/w/" + repos.list[0].weather[0].icon + ".png'>";
-  //repoSearchTerm.textContent = repos.city.name;
-  //repoContainerEl.innerHTML = repos.city.id;
-  repoContainerEl.innerHTML = "Temp: "+repos.list[0].main.temp + " &deg;F<br> Wind: "+repos.list[0].wind.speed + " MPH <br> Humidity: "+repos.list[0].main.humidity + "%";
-  
- // console.log(repos);
-  // loop over repos
- /*  for (var i = 0; i < repos.length; i++) {
-    console.log(repos);
-    // format repo name
-    repoName = repos[i].name;
-    document.getElementById("repos-container").innerHTML= repos[i].city;
-    text += repos[i].city.name + "<br>";
-    //window.alert(repoName);
-   
-    // create a container for each repo
-    var repoEl = document.createElement("div");
-    repoEl.classList = "list-item flex-row justify-space-between align-center";
+var displayForecast = function(forecast, searchTerm) {
+    var getDate = forecast.list[0].dt_txt; 
+    var displayDate1= moment(getDate).format('MM/DD/YYYY');
+    forecastDisplay.innerHTML = "<B>" +displayDate1+ "</B> <br> <img src='http://openweathermap.org/img/w/" + forecast.list[0].weather[0].icon + ".png'> <br> Temp: "+forecast.list[0].main.temp + " &deg;F<br> Wind: "+forecast.list[0].wind.speed + " MPH <br> Humidity: "+forecast.list[0].main.humidity + "%";
 
-    // create a span element to hold repository name
-    var titleEl = document.createElement("span");
-    titleEl.textContent = repoName;
 
-    // append to container
-    repoEl.appendChild(titleEl);
-
-    // create a status element
-    var statusEl = document.createElement("span");
-    statusEl.classList = "flex-row align-center";
- */
-    // check if current repo has issues or not
-   // if (repos[i].open_issues_count > 0) {
-    //  statusEl.innerHTML =
-    //    "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + " issue(s)";
-   // } else {
-   //   statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
-     
-  //  }
-    
-    // append to container
-    //repoEl.appendChild(statusEl);
-
-    // append container to the dom
-    //repoContainerEl.appendChild(repoEl);
   }
- //repoContainerEl.innerHTML =  repoName;
-//};
+ 
 
 // add event listeners to forms
 userFormEl.addEventListener("submit", formSubmitHandler);
